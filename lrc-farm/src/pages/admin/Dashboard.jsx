@@ -70,15 +70,22 @@ function Dashboard() {
 </Link>
     
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-bold">
-              Farm Settings
-            </h2>
+          <Link
+  to="/admin/settings"
+  className="rounded-2xl bg-white p-6 shadow-sm transition hover:-translate-y-1"
+>
+  <h2 className="text-xl font-bold">
+    Farm Settings
+  </h2>
 
-            <p className="mt-2 text-stone-600">
-              Update contact information.
-            </p>
-          </div>
+  <p className="mt-2 text-stone-600">
+    Update contact information and farm details.
+  </p>
+
+  <p className="mt-5 font-semibold text-green-700">
+    Manage Settings →
+  </p>
+</Link>
 
         </div>
 
