@@ -4,6 +4,11 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import CategoryPage from './pages/CategoryPage'
 import UploadTest from './pages/UploadTest'
+import Login from './pages/admin/Login'
+import Dashboard from './pages/admin/Dashboard'
+import ProtectedRoute from './components/ProtectedRoute'
+import Items from './pages/admin/Items'
+import Categories from './pages/admin/Categories'
 
 function App() {
   return (
@@ -12,6 +17,22 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route
+  path="/admin/items"
+  element={
+    <ProtectedRoute>
+      <Items />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin/categories"
+  element={
+    <ProtectedRoute>
+      <Categories />
+    </ProtectedRoute>
+  }
+/>
 
         <Route
           path="*"
@@ -33,6 +54,20 @@ function App() {
   path="/upload-test"
   element={<UploadTest />}
 />
+<Route
+  path="/admin/login"
+  element={<Login />}
+/>
+
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
+
       </Routes>
     </BrowserRouter>
   )
