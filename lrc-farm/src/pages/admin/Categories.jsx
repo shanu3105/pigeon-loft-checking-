@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { Link } from 'react-router-dom'
 
 const BUCKET_NAME = 'farm-images'
 
@@ -280,32 +281,37 @@ console.log('Current logged-in user:', user)
                     </p>
                   )}
 
-                  <div className="mt-5 flex items-center justify-between">
+                  <div className="mt-5 flex items-center justify-between gap-3">
 
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        category.is_active
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}
-                    >
-                      {category.is_active
-                        ? 'Active'
-                        : 'Inactive'}
-                    </span>
+  <span
+    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+      category.is_active
+        ? 'bg-green-100 text-green-700'
+        : 'bg-red-100 text-red-700'
+    }`}
+  >
+    {category.is_active ? 'Active' : 'Inactive'}
+  </span>
 
-                    <button
-                      onClick={() =>
-                        toggleCategory(category)
-                      }
-                      className="text-sm font-semibold text-green-700"
-                    >
-                      {category.is_active
-                        ? 'Deactivate'
-                        : 'Activate'}
-                    </button>
+  <div className="flex items-center gap-4">
 
-                  </div>
+    <Link
+      to={`/admin/categories/${category.id}/edit`}
+      className="text-sm font-semibold text-blue-700"
+    >
+      Edit
+    </Link>
+
+    <button
+      onClick={() => toggleCategory(category)}
+      className="text-sm font-semibold text-green-700"
+    >
+      {category.is_active ? 'Deactivate' : 'Activate'}
+    </button>
+
+  </div>
+
+</div>
 
                 </div>
 

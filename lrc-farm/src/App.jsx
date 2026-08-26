@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Items from './pages/admin/Items'
 import Categories from './pages/admin/Categories'
 import EditItem from './pages/admin/EditItem'
+import EditCategory from './pages/admin/EditCategory'
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,14 @@ function App() {
   element={
     <ProtectedRoute>
       <Items />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin/categories/:id/edit"
+  element={
+    <ProtectedRoute>
+      <EditCategory />
     </ProtectedRoute>
   }
 />
