@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { uploadItemImage } from '../../lib/storage'
 
@@ -385,32 +386,37 @@ function Items() {
                       Availability: {item.availability_status}
                     </p>
 
-                    <div className="mt-5 flex items-center justify-between">
+<div className="mt-5 flex items-center justify-between gap-3">
 
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          item.is_active
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-700'
-                        }`}
-                      >
-                        {item.is_active
-                          ? 'Active'
-                          : 'Inactive'}
-                      </span>
+  <span
+    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+      item.is_active
+        ? 'bg-green-100 text-green-700'
+        : 'bg-red-100 text-red-700'
+    }`}
+  >
+    {item.is_active ? 'Active' : 'Inactive'}
+  </span>
 
-                      <button
-                        onClick={() =>
-                          toggleItemStatus(item)
-                        }
-                        className="text-sm font-semibold text-green-700"
-                      >
-                        {item.is_active
-                          ? 'Deactivate'
-                          : 'Activate'}
-                      </button>
+  <div className="flex items-center gap-4">
 
-                    </div>
+    <Link
+      to={`/admin/items/${item.id}/edit`}
+      className="text-sm font-semibold text-blue-700"
+    >
+      Edit
+    </Link>
+
+    <button
+      onClick={() => toggleItemStatus(item)}
+      className="text-sm font-semibold text-green-700"
+    >
+      {item.is_active ? 'Deactivate' : 'Activate'}
+    </button>
+
+  </div>
+
+</div>
 
                   </div>
 
