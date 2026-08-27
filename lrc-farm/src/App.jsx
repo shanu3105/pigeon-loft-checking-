@@ -12,6 +12,7 @@ import Categories from './pages/admin/Categories'
 import EditItem from './pages/admin/EditItem'
 import EditCategory from './pages/admin/EditCategory'
 import FarmSettings from './pages/admin/FarmSettings'
+import Footer from './components/Footer'
 function App() {
   return (
     <BrowserRouter>
@@ -95,7 +96,9 @@ function App() {
 />
 
       </Routes>
+       <Footer />
     </BrowserRouter>
+    
   )
 }
 
