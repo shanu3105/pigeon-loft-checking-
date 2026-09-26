@@ -3,6 +3,74 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
+const SITE_URL = 'https://lrcfarm-ca9f9.web.app'
+
+function updateSEO(category) {
+  if (!category) return
+
+  const categoryName = category.name || 'Farm Products'
+  const description =
+    category.description ||
+    `Explore ${categoryName} available at LRC Farm in Tirunelveli, Tamil Nadu.`
+
+  document.title = `LRC Farm ${categoryName} | ${categoryName} in Tirunelveli`
+
+  const metaDescription = document.querySelector(
+    'meta[name="description"]'
+  )
+
+  if (metaDescription) {
+    metaDescription.setAttribute(
+      'content',
+      `${description} Contact LRC Farm in Tirunelveli, Tamil Nadu for availability and enquiries.`
+    )
+  }
+
+  const canonical = document.querySelector(
+    'link[rel="canonical"]'
+  )
+
+  if (canonical) {
+    canonical.setAttribute(
+      'href',
+      `${SITE_URL}/category/${category.slug}`
+    )
+  }
+
+  const ogTitle = document.querySelector(
+    'meta[property="og:title"]'
+  )
+
+  if (ogTitle) {
+    ogTitle.setAttribute(
+      'content',
+      `LRC Farm ${categoryName} | ${categoryName} in Tirunelveli`
+    )
+  }
+
+  const ogDescription = document.querySelector(
+    'meta[property="og:description"]'
+  )
+
+  if (ogDescription) {
+    ogDescription.setAttribute(
+      'content',
+      `${description} Explore available ${categoryName.toLowerCase()} at LRC Farm.`
+    )
+  }
+
+  const ogUrl = document.querySelector(
+    'meta[property="og:url"]'
+  )
+
+  if (ogUrl) {
+    ogUrl.setAttribute(
+      'content',
+      `${SITE_URL}/category/${category.slug}`
+    )
+  }
+}
+
 function CategoryPage() {
   const { slug } = useParams()
 
@@ -16,12 +84,13 @@ function CategoryPage() {
       setLoading(true)
       setError(null)
 
-      const { data: categoryData, error: categoryError } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('slug', slug)
-        .eq('is_active', true)
-        .single()
+      const { data: categoryData, error: categoryError } =
+        await supabase
+          .from('categories')
+          .select('*')
+          .eq('slug', slug)
+          .eq('is_active', true)
+          .single()
 
       if (categoryError) {
         setError('Category not found')
@@ -31,12 +100,15 @@ function CategoryPage() {
 
       setCategory(categoryData)
 
-      const { data: itemData, error: itemError } = await supabase
-        .from('items')
-        .select('*')
-        .eq('category_id', categoryData.id)
-        .eq('is_active', true)
-        .order('display_order', { ascending: true })
+      updateSEO(categoryData)
+
+      const { data: itemData, error: itemError } =
+        await supabase
+          .from('items')
+          .select('*')
+          .eq('category_id', categoryData.id)
+          .eq('is_active', true)
+          .order('display_order', { ascending: true })
 
       if (itemError) {
         setError(itemError.message)
@@ -67,7 +139,7 @@ function CategoryPage() {
 
         <Link
           to="/"
-          className="mt-6 text-green-700 font-semibold"
+          className="mt-6 font-semibold text-green-700"
         >
           ← Back to Home
         </Link>
@@ -146,11 +218,11 @@ function CategoryPage() {
                   )}
 
                   <Link
-  to={`/category/${category.slug}/item/${item.slug}`}
-  className="mt-6 inline-block font-semibold text-green-700"
->
-  View Details →
-</Link>
+                    to={`/category/${category.slug}/item/${item.slug}`}
+                    className="mt-6 inline-block font-semibold text-green-700"
+                  >
+                    View Details →
+                  </Link>
                 </article>
               ))}
 

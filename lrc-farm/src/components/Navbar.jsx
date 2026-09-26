@@ -16,18 +16,25 @@ function Navbar() {
 
         <Link
           to="/"
-          className="flex flex-col"
+          className="flex items-center gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          <span className="text-2xl font-bold tracking-tight text-[#1f3828]">
-            {settings?.farm_name || 'LRC Farm'}
-          </span>
+          <img
+            src="/favicon.png"
+            alt="LRC Farm"
+            className="h-11 w-11 object-contain"
+          />
 
-          <span className="text-xs tracking-[0.2em] uppercase text-stone-500">
-            Fresh · Healthy · Farm Raised
-          </span>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold tracking-tight text-[#1f3828]">
+              {settings?.farm_name || 'LRC Farm'}
+            </span>
+
+            <span className="text-xs tracking-[0.2em] uppercase text-stone-500">
+              Fresh · Healthy · Farm Raised
+            </span>
+          </div>
         </Link>
-
         {/* DESKTOP NAVIGATION */}
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -48,7 +55,7 @@ function Navbar() {
 
           <a
             href="#contact"
-            className="rounded-full bg-[#1f3828] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-green-800"
+            className="rounded-full bg-[#1f3828] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-green-800"
           >
             Contact Us
           </a>

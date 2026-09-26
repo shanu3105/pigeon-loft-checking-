@@ -4,6 +4,137 @@ import { ArrowLeft, MessageCircle, Phone } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useFarmSettings } from '../hooks/useFarmSettings'
 
+const SITE_URL = 'https://lrcfarm-ca9f9.web.app'
+
+function updateSEO(item, category, imageUrl) {
+  if (!item || !category) return
+
+  const itemName = item.name || 'Farm Item'
+  const categoryName = category.name || 'Farm Products'
+
+  const description =
+    item.description ||
+    `${itemName} available at LRC Farm in Tirunelveli, Tamil Nadu.`
+
+  const seoDescription =
+    `${description} Contact LRC Farm in Tirunelveli, Tamil Nadu for availability and enquiries.`
+
+  const pageUrl =
+    `${SITE_URL}/category/${category.slug}/item/${item.slug}`
+
+  // Browser title
+  document.title =
+    `${itemName} | LRC Farm | Tirunelveli, Tamil Nadu`
+
+  // Meta description
+  const metaDescription = document.querySelector(
+    'meta[name="description"]'
+  )
+
+  if (metaDescription) {
+    metaDescription.setAttribute(
+      'content',
+      seoDescription
+    )
+  }
+
+  // Canonical URL
+  const canonical = document.querySelector(
+    'link[rel="canonical"]'
+  )
+
+  if (canonical) {
+    canonical.setAttribute(
+      'href',
+      pageUrl
+    )
+  }
+
+  // Open Graph title
+  const ogTitle = document.querySelector(
+    'meta[property="og:title"]'
+  )
+
+  if (ogTitle) {
+    ogTitle.setAttribute(
+      'content',
+      `${itemName} | LRC Farm`
+    )
+  }
+
+  // Open Graph description
+  const ogDescription = document.querySelector(
+    'meta[property="og:description"]'
+  )
+
+  if (ogDescription) {
+    ogDescription.setAttribute(
+      'content',
+      seoDescription
+    )
+  }
+
+  // Open Graph URL
+  const ogUrl = document.querySelector(
+    'meta[property="og:url"]'
+  )
+
+  if (ogUrl) {
+    ogUrl.setAttribute(
+      'content',
+      pageUrl
+    )
+  }
+
+  // Open Graph image
+  const ogImage = document.querySelector(
+    'meta[property="og:image"]'
+  )
+
+  if (ogImage && imageUrl) {
+    ogImage.setAttribute(
+      'content',
+      imageUrl
+    )
+  }
+
+  // Twitter title
+  const twitterTitle = document.querySelector(
+    'meta[name="twitter:title"]'
+  )
+
+  if (twitterTitle) {
+    twitterTitle.setAttribute(
+      'content',
+      `${itemName} | LRC Farm`
+    )
+  }
+
+  // Twitter description
+  const twitterDescription = document.querySelector(
+    'meta[name="twitter:description"]'
+  )
+
+  if (twitterDescription) {
+    twitterDescription.setAttribute(
+      'content',
+      seoDescription
+    )
+  }
+
+  // Twitter image
+  const twitterImage = document.querySelector(
+    'meta[name="twitter:image"]'
+  )
+
+  if (twitterImage && imageUrl) {
+    twitterImage.setAttribute(
+      'content',
+      imageUrl
+    )
+  }
+}
+
 function ItemPage() {
   const { categorySlug, itemSlug } = useParams()
 
@@ -12,8 +143,8 @@ function ItemPage() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
   const { settings } = useFarmSettings()
-  console.log('Farm Settings:', settings)
 
   useEffect(() => {
     async function fetchItem() {
@@ -21,12 +152,13 @@ function ItemPage() {
       setError(null)
 
       // Get category
-      const { data: categoryData, error: categoryError } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('slug', categorySlug)
-        .eq('is_active', true)
-        .single()
+      const { data: categoryData, error: categoryError } =
+        await supabase
+          .from('categories')
+          .select('*')
+          .eq('slug', categorySlug)
+          .eq('is_active', true)
+          .single()
 
       if (categoryError || !categoryData) {
         setError('Category not found')
@@ -37,13 +169,14 @@ function ItemPage() {
       setCategory(categoryData)
 
       // Get item
-      const { data: itemData, error: itemError } = await supabase
-        .from('items')
-        .select('*')
-        .eq('category_id', categoryData.id)
-        .eq('slug', itemSlug)
-        .eq('is_active', true)
-        .single()
+      const { data: itemData, error: itemError } =
+        await supabase
+          .from('items')
+          .select('*')
+          .eq('category_id', categoryData.id)
+          .eq('slug', itemSlug)
+          .eq('is_active', true)
+          .single()
 
       if (itemError || !itemData) {
         setError('Item not found')
@@ -54,15 +187,25 @@ function ItemPage() {
       setItem(itemData)
 
       // Get item images
-      const { data: imageData, error: imageError } = await supabase
-        .from('item_images')
-        .select('*')
-        .eq('item_id', itemData.id)
-        .order('display_order', { ascending: true })
+      const { data: imageData, error: imageError } =
+        await supabase
+          .from('item_images')
+          .select('*')
+          .eq('item_id', itemData.id)
+          .order('display_order', { ascending: true })
 
-      if (!imageError) {
-        setImages(imageData || [])
-      }
+      const loadedImages = !imageError
+        ? imageData || []
+        : []
+
+      setImages(loadedImages)
+
+      // Update SEO
+      updateSEO(
+        itemData,
+        categoryData,
+        loadedImages[0]?.image_url
+      )
 
       setLoading(false)
     }
@@ -124,7 +267,7 @@ function ItemPage() {
                 <div className="overflow-hidden rounded-3xl bg-stone-200">
                   <img
                     src={images[0].image_url}
-                    alt={item.name}
+                    alt={`${item.name} at LRC Farm`}
                     className="aspect-square w-full object-cover"
                   />
                 </div>
@@ -135,7 +278,7 @@ function ItemPage() {
                       <img
                         key={image.id}
                         src={image.image_url}
-                        alt={item.name}
+                        alt={`${item.name} at LRC Farm`}
                         className="aspect-square rounded-xl object-cover"
                       />
                     ))}
@@ -156,7 +299,7 @@ function ItemPage() {
           {/* DETAILS */}
           <div className="flex flex-col justify-center">
 
-            <p className="text-sm font-semibold tracking-[0.2em] uppercase text-green-700">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-green-700">
               LRC Farm · {category.name}
             </p>
 
@@ -177,25 +320,26 @@ function ItemPage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
 
               {settings?.whatsapp && (
-  <a
-    href={`https://wa.me/${settings.whatsapp}?text=${whatsappMessage}`}
-    target="_blank"
-    rel="noreferrer"
-    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1f3828] px-6 py-3.5 font-semibold text-white transition hover:bg-green-800"
-  >
-    <MessageCircle size={20} />
-    WhatsApp Us
-  </a>
-)}
-{settings?.phone && (
-  <a
-    href={`tel:${settings.phone}`}
-    className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1f3828] px-6 py-3.5 font-semibold text-[#1f3828] transition hover:bg-stone-100"
-  >
-    <Phone size={20} />
-    Call LRC Farm
-  </a>
-)}
+                <a
+                  href={`https://wa.me/${settings.whatsapp}?text=${whatsappMessage}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1f3828] px-6 py-3.5 font-semibold text-white transition hover:bg-green-800"
+                >
+                  <MessageCircle size={20} />
+                  WhatsApp Us
+                </a>
+              )}
+
+              {settings?.phone && (
+                <a
+                  href={`tel:${settings.phone}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1f3828] px-6 py-3.5 font-semibold text-[#1f3828] transition hover:bg-stone-100"
+                >
+                  <Phone size={20} />
+                  Call LRC Farm
+                </a>
+              )}
 
             </div>
 

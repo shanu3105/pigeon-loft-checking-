@@ -39,7 +39,7 @@ function Home() {
 
   return (
 
-      
+
     <main className="min-h-screen bg-[#f5f3ed] text-stone-900">
 {/* HERO SECTION */}
 <section
@@ -157,8 +157,12 @@ function Home() {
 
       <div className="relative ml-auto max-w-md rounded-[2rem] border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl">
 
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/20 bg-green-400/15 text-3xl">
-          🌿
+        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-green-400/15">
+          <img
+            src="/favicon.png"
+            alt="LRC Farm logo"
+            className="h-full w-full object-contain"
+          />
         </div>
 
         <p className="mt-8 text-sm font-semibold uppercase tracking-[0.25em] text-green-300">
@@ -179,7 +183,7 @@ function Home() {
 
         <a
           href="#categories"
-          className="mt-8 inline-flex items-center gap-2 font-semibold text-green-300 transition hover:text-white"
+          className="mt-8 inline-flex items-center gap-2 font-semibold text-white transition hover:text-green-200"
         >
           View categories
           <ArrowRight size={18} />
