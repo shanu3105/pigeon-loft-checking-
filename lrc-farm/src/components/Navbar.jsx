@@ -55,7 +55,7 @@ function Navbar() {
 
           <a
             href="#contact"
-            className="rounded-full bg-[#1f3828] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-green-800"
+            className="rounded-full bg-[#1f3828] px-5 py-2.5 text-sm font-bold !text-white transition hover:bg-green-800"
           >
             Contact Us
           </a>
